@@ -245,6 +245,12 @@ def save_status(
     status_name = get_status_name(pair, collection)
     path = expand_path(os.path.join(base_path, status_name)) + "." + data_type
     prepare_status_path(path)
+    if data is None:
+        try:
+            os.remove(path)
+        except OSError:  # the file has not existed
+            pass
+        return
 
     with atomic_write(path, mode="w", overwrite=True) as f:
         json.dump(data, f)
@@ -342,6 +348,19 @@ def assert_permissions(path: str, wanted: int) -> None:
         os.chmod(path, wanted)
 
 
+def handle_collection_was_removed(config, collection):
+    if "delete" in config["implicit"]:
+        storage_type = config["type"]
+        cls, config = storage_class_from_config(config)
+        config["collection"] = collection
+        try:
+            args = cls.delete_collection(**config)
+            args["type"] = storage_type
+            return args
+        except NotImplementedError as e:
+            cli_logger.error(e)
+
+
 async def handle_collection_not_found(config, collection, e=None):
     storage_name = config.get("instance_name", None)
 
@@ -351,7 +370,8 @@ async def handle_collection_not_found(config, collection, e=None):
         )
     )
 
-    if click.confirm("Should vdirsyncer attempt to create it?"):
+    if "create" in config["implicit"] or click.confirm(
+            "Should vdirsyncer attempt to create it?"):
         storage_type = config["type"]
         cls, config = storage_class_from_config(config)
         config["collection"] = collection

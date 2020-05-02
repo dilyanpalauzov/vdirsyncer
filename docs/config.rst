@@ -381,6 +381,8 @@ Local
       #post_hook = null
       #pre_deletion_hook = null
       #fileignoreext = ".tmp"
+      #implicit = "create"
+      #implicit = ["create", "delete"]
 
     Can be used with `khal <http://lostpackets.de/khal/>`_. See :doc:`vdir` for
     a more formal description of the format.
@@ -405,6 +407,12 @@ Local
         The command will be called with the path of the deleted file.
     :param fileeignoreext: The file extention to ignore. It is only useful
         if fileext is set to the empty string. The default is ``.tmp``.
+    :param implicit: When a new collection is created on the source,
+        create it in the destination without asking questions, when
+        the value is "create".  When the value is "delete" and a collection
+        is removed on the source, remove it in the destination.  The value
+        can be a string or an array of strings.  The deletion is implemented
+        only for the "filesystem" storage.
 
 .. storage:: singlefile
 
