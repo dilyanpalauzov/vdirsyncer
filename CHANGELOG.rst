@@ -9,9 +9,12 @@ Package maintainers and users who have to manually update their installation
 may want to subscribe to `GitHub's tag feed
 <https://github.com/pimutils/vdirsyncer/tags.atom>`_.
 
-Version 0.19.0
+Unreleasd 0.19
 ==============
-
+- Add ``implicit`` option to storage section.  It creates/deletes implicitly
+  collections in the destinations, when new collections are created/deleted
+  in the source.  The deletion is implemented only for the "filesystem" storage.
+  See :ref:`storage_config`.
 - Add "description" and "order" as metadata.  These fetch the CalDAV:
   calendar-description, CardDAV:addressbook-description and apple-ns:calendar-order
   properties.
