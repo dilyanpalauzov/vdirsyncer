@@ -63,7 +63,7 @@ class FilesystemStorage(Storage):
 
     @classmethod
     def _validate_collection(cls, path):
-        if not os.path.isdir(path):
+        if not os.path.isdir(path) or os.path.islink(path):
             return False
         if os.path.basename(path).startswith("."):
             return False
