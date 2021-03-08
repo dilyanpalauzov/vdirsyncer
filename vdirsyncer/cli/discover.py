@@ -67,16 +67,15 @@ async def collections_for_pair(
                     rv["collections"], pair.config_a, pair.config_b
                 )
             )
-        elif rv:
+        if rv:
             raise exceptions.UserError(
                 "Detected change in config file, "
                 f"please run `vdirsyncer discover {pair.name}`."
             )
-        else:
-            raise exceptions.UserError(
-                f"Please run `vdirsyncer discover {pair.name}` "
-                " before synchronization."
-            )
+        raise exceptions.UserError(
+            f"Please run `vdirsyncer discover {pair.name}` "
+            " before synchronization."
+        )
 
     logger.info(f"Discovering collections for pair {pair.name}")
 

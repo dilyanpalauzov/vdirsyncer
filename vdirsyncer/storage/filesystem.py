@@ -205,9 +205,7 @@ class FilesystemStorage(Storage):
             with open(fpath, "rb") as f:
                 return normalize_meta_value(f.read().decode(self.encoding))
         except OSError as e:
-            if e.errno == errno.ENOENT:
-                return None
-            else:
+            if e.errno != errno.ENOENT:
                 raise
 
     async def set_meta(self, key, value):

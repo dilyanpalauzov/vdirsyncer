@@ -263,12 +263,9 @@ class PairConfig:
     ):
         if conflict_resolution in (None, "a wins", "b wins"):
             return conflict_resolution
-        elif (
-            isinstance(conflict_resolution, list)
-            and len(conflict_resolution) > 1
-            and conflict_resolution[0] == "command"
-        ):
-
+        if isinstance(conflict_resolution, list) and \
+                len(conflict_resolution) > 1 and \
+                conflict_resolution[0] == "command":
             def resolve(a, b):
                 a_name = self.config_a["instance_name"]
                 b_name = self.config_b["instance_name"]
@@ -277,8 +274,7 @@ class PairConfig:
                 return _resolve_conflict_via_command(a, b, command, a_name, b_name)
 
             return resolve
-        else:
-            raise ValueError("Invalid value for `conflict_resolution`.")
+        raise ValueError("Invalid value for `conflict_resolution`.")
 
     # The following parameters are lazily evaluated because evaluating
     # self.config_a would expand all `x.fetch` parameters. This is costly and
