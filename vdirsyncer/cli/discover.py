@@ -60,21 +60,16 @@ async def collections_for_pair(
     if from_cache:
         rv = load_status(status_path, pair.name, data_type="collections")
         if rv and rv.get("cache_key", None) == cache_key:
-            return list(
-                _expand_collections_cache(
-                    rv["collections"], pair.config_a, pair.config_b
-                )
-            )
-        elif rv:
-            raise exceptions.UserError(
-                "Detected change in config file, "
-                "please run `vdirsyncer discover {}`.".format(pair.name)
-            )
-        else:
-            raise exceptions.UserError(
-                "Please run `vdirsyncer discover {}` "
-                " before synchronization.".format(pair.name)
-            )
+            return list(_expand_collections_cache(
+                rv['collections'], pair.config_a, pair.config_b
+            ))
+        if rv:
+            raise exceptions.UserError("Detected change in config file, "
+                                       "please run `vdirsyncer discover {}`."
+                                       .format(pair.name))
+        raise exceptions.UserError("Please run `vdirsyncer discover {}` "
+                                   " before synchronization."
+                                   .format(pair.name))
 
     logger.info(f"Discovering collections for pair {pair.name}")
 
