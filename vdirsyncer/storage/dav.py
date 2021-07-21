@@ -418,6 +418,8 @@ class DAVSession:
             connector=self.connector,
             connector_owner=False,
             trust_env=True,
+            # headers={"Accept-Encoding": "br, gz"}
+            skip_auto_headers=('Accept-Encoding', ),
             # TODO use `raise_for_status=true`, though this needs traces first,
         )
 
